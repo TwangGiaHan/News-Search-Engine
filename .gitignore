@@ -1,5 +1,7 @@
 myenv/
+knn/
 tf-idf/
 newspaperbot
 json_parser.py
 format_json.py
+search_engine.py
