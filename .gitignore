@@ -1,5 +1,5 @@
 myenv/
 tf-idf/
-newspaperbot/
+newspaperbot
 json_parser.py
 format_json.py
