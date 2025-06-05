@@ -1,6 +1,5 @@
 myenv/
-tf-idf/business/
-tf-idf/entertainment/
-tf-idf/health/
-tf-idf/sport/
-tf-idf/style/
+tf-idf/
+newspaperbot/
+json_parser.py
+format_json.py

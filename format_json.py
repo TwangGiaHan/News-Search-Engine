@@ -10,12 +10,10 @@
 
 import json
 
-# Đọc metadata2.json thành dict với key là source_url
 with open("metadata2.json", encoding="utf-8") as f:
     meta2 = json.load(f)
 meta2_dict = {item["source_url"]: item["title"] for item in meta2 if "source_url" in item and "title" in item}
 
-# Đọc metadata.json và cập nhật title nếu có cùng source_url
 with open("metadata.json", encoding="utf-8") as f:
     meta = json.load(f)
 
@@ -24,6 +22,5 @@ for item in meta:
     if url in meta2_dict:
         item["title"] = meta2_dict[url]
 
-# Ghi ra file mới (hoặc ghi đè nếu muốn)
 with open("metadata_merged.json", "w", encoding="utf-8") as f:
     json.dump(meta, f, ensure_ascii=False, indent=2)
