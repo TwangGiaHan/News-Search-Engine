@@ -1,0 +1,44 @@
+import numpy as np
+import json
+import pickle
+from sklearn.metrics.pairwise import cosine_similarity
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+stop_words = set(stopwords.words('english'))
+stemmer = PorterStemmer()
+
+def preprocess_text(text):
+    tokens = re.findall(r'\b[a-zA-Z]{2,}\b', text.lower())
+    tokens = [t for t in tokens if t not in stop_words]
+    stemmed = [stemmer.stem(t) for t in tokens]
+    return ' '.join(stemmed)
+
+def load_engine():
+    tfidf_matrix = np.load("tfidf_matrix.npy")
+    with open("cnn.json", encoding="utf-8") as f:
+        metadata = json.load(f)
+    with open("vectorizer.pkl", "rb") as f:
+        vectorizer = pickle.load(f)
+    return tfidf_matrix, metadata, vectorizer
+
+def search(query, top_k=10):
+    tfidf_matrix, metadata, vectorizer = load_engine()
+    query_proc = preprocess_text(query)
+    query_vec = vectorizer.transform([query_proc]).toarray()
+    scores = cosine_similarity(query_vec, tfidf_matrix)[0]
+    top_indices = scores.argsort()[-top_k:][::-1]
+    results = []
+    for idx in top_indices:
+        results.append({
+            "title": metadata[idx].get("title", "(no title)"),
+            "url": metadata[idx].get("source_url", "#"),
+            "cate": metadata[idx].get("cate", "unknown"),
+            "score": round(scores[idx], 4)
+        })
+    return results

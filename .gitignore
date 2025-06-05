@@ -1,0 +1,6 @@
+myenv/
+tf-idf/business/
+tf-idf/entertainment/
+tf-idf/health/
+tf-idf/sport/
+tf-idf/style/
